@@ -1,7 +1,7 @@
 # VIPRIN — Centro de trabajo (Claude Code)
 
 Repo de Patricio (artista, DJ y productor, Buenos Aires). Acá se guardan los videos de los Reels y desde acá Claude gestiona la publicación.
-Si existe `CLAUDE.local.md` (no se sube, está en .gitignore), leelo: tiene los datos privados (precios, métricas, audiencia, pauta y carrera).
+Datos privados (carrera, precios, métricas, audiencia, pauta): leelos con Claude Docs en "VIPRIN — Contexto privado" → https://claude.ai/artifact/492hNWyjiQ8wbmj4TfmDn6 . Si existe `CLAUDE.local.md` (en .gitignore), tiene lo mismo.
 
 ## Cómo hablarle
 - Español rioplatense, directo, analítico y corto (mínimos tokens). No llamarlo "rey".
