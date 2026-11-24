@@ -17,24 +17,20 @@ Datos privados (carrera, precios, métricas, audiencia, pauta): leelos con Claud
 - **Windsor.ai**: Instagram VIPRIN (cuenta `17841401478772783`), TikTok VIPRIN, Meta Ads. Para métricas (`get_data`) y para publicar (`execute_action`).
 - **Notion**: base "⭐ Agenda semanal". La agenda va **solo** ahí. Nunca crear eventos en Google o Notion Calendar porque se duplican.
 - **Claude Docs**: estrategia en "VIPRIN — Diagnóstico y estrategia de crecimiento" → https://claude.ai/artifact/V67Ao7z2cRXWoLUQsecB9F
-- **Scheduled tasks** (Claude Code Remote: `list_triggers`, `create_trigger`): cada Reel de prueba es una tarea programada de una sola vez.
+- **Scheduled tasks** (Claude Code Remote): el "Publicador automático de Reels de prueba VIPRIN" (9/15/21) publica todo lo que esté en Notion con "Publicación" = "Auto".
 - Gmail.
 Si un conector no aparece, pedile que lo active en claude.ai → Configuración → Conectores.
 
 ## Pipeline de Reels
 1. **Video**: `videos/AAAA-MM-DD_HHMM_slug.mp4` (hora de Argentina). Material de anuncios en `ads/`.
 2. **Push a `main`**: la URL pública es `https://raw.githubusercontent.com/VIPRIN99/VIPRIN-REELS/main/videos/<archivo>`. No borres ni renombres videos que tengan una tarea pendiente, porque se rompe la publicación.
-3. **Tarea programada** (`create_trigger`, `run_once_at` en America/Buenos_Aires). Nombre: `Reel de prueba DD/MM HH:MM — <título>`. Prompt modelo:
-   > Publicá un REEL DE PRUEBA en el Instagram de Patricio (@viprin.z) usando el conector Windsor.ai. REGLA OBLIGATORIA: tiene que salir como Reel de prueba (Trial Reel). Nunca publiques sin trial_params; si la llamada falla, NO reintentes sin trial_params ni de otra forma: reportá el error.
-   > Paso 1: llamá mcp__Windsor_ai__execute_action con connector "instagram", account "17841401478772783", action "create_video_post", params {"video_url": "<URL raw>", "caption": "<caption>", "trial_params": {"graduation_strategy": "MANUAL"}}. Verificá que trial_params esté incluido antes de llamar.
-   > Paso 2: en Notion, buscá en la base "Agenda semanal" la página "<título>" y poné "Publicación" en "Publicado" (o "Error" con el motivo si falló).
-   > Paso 3: dejá un resumen de una línea: si se publicó como reel de prueba o no.
-4. **Notion**: crear la página en "⭐ Agenda semanal" con el título exacto y "Publicación" en "Programado".
+3. **Notion (así se programa)**: crear la página en "⭐ Agenda semanal" con Tipo "REEL DE PRUEBA", "Fecha" = día y hora del turno (America/Buenos_Aires), "Video URL" = URL raw, "Caption" final y **"Publicación" = "Auto"**. El Publicador automático (tarea recurrente 9/15/21 creada por Patricio desde la nube con Windsor y Notion; prompt en `publicador_prompt.md`) publica como Trial Reel cada página "Auto" de su turno y la pasa a "Publicado" o "Error".
+4. **No crear tareas por reel desde esta PC**: desde acá `create_trigger` no guarda conectores y la tarea no puede publicar. Las tareas viejas de un solo reel (hasta el 26/11) usan "En cola" y siguen solas; no las mezcles con "Auto".
 5. **Orden**: cada Reel nuevo va al próximo turno libre, en orden cronológico, rellenando huecos.
 
 ### "¿Ya están los Reels de prueba?"
 Cruzá estas tres fuentes y respondé con una tabla (fecha · hora · título · estado):
-- `list_triggers`: tareas pendientes (`next_run_at`) y última ejecución (`last_run.status`).
+- `list_triggers`: que el Publicador automático esté activo y su `last_run.status` (más las tareas viejas de un solo reel).
 - `videos/`: que cada tarea tenga su `.mp4` en `main`.
 - Notion "Agenda semanal": estado de "Publicación". Si hace falta, confirmá con Windsor que el Reel salió.
 Marcá huecos (días sin los 3 turnos), tareas fallidas y videos sin tarea.
