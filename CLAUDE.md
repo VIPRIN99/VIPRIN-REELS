@@ -24,7 +24,7 @@ Si un conector no aparece, pedile que lo active en claude.ai → Configuración 
 ## Pipeline de Reels
 1. **Video**: `videos/AAAA-MM-DD_HHMM_slug.mp4` (hora de Argentina). Material de anuncios en `ads/`.
 2. **Push a `main`**: la URL pública es `https://raw.githubusercontent.com/VIPRIN99/VIPRIN-REELS/main/videos/<archivo>`. No borres ni renombres videos que tengan una tarea pendiente, porque se rompe la publicación.
-3. **Notion (así se programa)**: crear la página en "⭐ Agenda semanal" con Tipo "REEL DE PRUEBA", "Fecha" = día y hora del turno (America/Buenos_Aires), "Video URL" = URL raw, "Caption" final y **"Publicación" = "Auto"**. El Publicador automático (tarea recurrente 9/15/21 creada por Patricio desde la nube con Windsor y Notion; prompt en `publicador_prompt.md`) publica como Trial Reel cada página "Auto" de su turno y la pasa a "Publicado" o "Error".
+3. **Notion (así se programa)**: crear la página en "⭐ Agenda semanal" con Tipo "REEL DE PRUEBA", "Fecha" = día y hora del turno (America/Buenos_Aires), "Video URL" = URL raw, "Caption" final y **"Publicación" = "Auto"**. El Publicador automático (tarea recurrente 9/15/21 id `trig_01E2G4onhqKxY1n7XiAx7tfG`, ya tiene Windsor y Notion; si hay que cambiarlo usar `update_trigger`, que conserva los conectores) publica como Trial Reel cada página "Auto" de su turno y la pasa a "Publicado" o "Error".
 4. **No crear tareas por reel desde esta PC**: desde acá `create_trigger` no guarda conectores y la tarea no puede publicar. Las tareas viejas de un solo reel (hasta el 26/11) usan "En cola" y siguen solas; no las mezcles con "Auto".
 5. **Orden**: cada Reel nuevo va al próximo turno libre, en orden cronológico, rellenando huecos.
 
