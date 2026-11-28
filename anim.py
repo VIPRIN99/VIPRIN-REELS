@@ -52,12 +52,26 @@ def load(p):
 import os
 CL=os.environ.get("COVER_L",D+"/1900x1900-000000-80-0-0.jpg"); CR=os.environ.get("COVER_R",D+"/portada/portada_A_cupula.jpg")
 covers=[(load(CL),x1,0.0),(load(CR),x2,1.3)]
+# tapa "?" que se revela en REVEAL segundos (opcional)
+REVEAL=float(os.environ["REVEAL"]) if os.environ.get("REVEAL") else None
+if REVEAL is not None:
+    qp=os.path.join(os.environ.get("TEMP","."),f"_qcard_{os.getpid()}.png")
+    q=Image.new("RGB",(900,900),(0,0,0)); qd=ImageDraw.Draw(q)
+    for yy in range(900):
+        v=yy/899; qd.line([(0,yy),(899,yy)],fill=(int(18+30*v),int(6+8*v),int(34+50*v)))
+    qf=ImageFont.truetype(FB,560); bb=qd.textbbox((0,0),"?",font=qf)
+    qd.text(((900-(bb[2]-bb[0]))/2-bb[0],(900-(bb[3]-bb[1]))/2-bb[1]),"?",font=qf,fill=(255,255,255))
+    q.save(qp); QCARD=load(qp); os.remove(qp)
 def backout(u):
     u=min(max(u,0),1); c1=1.70158; c3=c1+1; return 1+c3*(u-1)**3+c1*(u-1)**2
 def cover_layer(t):
     L=Image.new("RGBA",(W,H),(0,0,0,0))
     for k,((c,g,pad),x,ph) in enumerate(covers):
-        st=0.25+k*0.15; u=(t-st)/0.5
+        st=0.25+k*0.15
+        if k==1 and REVEAL is not None:
+            if t<REVEAL: c,g,pad=QCARD
+            else: st=REVEAL
+        u=(t-st)/0.5
         if u<=0: continue
         pop=backout(u); a=min(1,u*1.6)
         br=1+0.025*math.sin(2*math.pi*t/3.2+ph)
